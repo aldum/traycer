@@ -1,7 +1,7 @@
 package pw.aldum.traycer
 
 case class Color(r: Double, g: Double, b: Double):
-  override def toString: String = s"rgb($r, $g, $b)"
+  override def toString = s"rgb($r, $g, $b)"
 
   def +(that: Color) =
       Color( r + that.r
