@@ -21,6 +21,28 @@ case class Canvas( pixels: Array[Array[Color]] ):
   def pixelAt(x: Int, y: Int): Color =
     pixels(y)(x)
 
+  object PPM:
+    def createHeader: String =
+      s"""|P3
+          |$width $height
+          |255""".stripMargin
+
+    def toPPM: String =
+      val colArray = pixels.map(r =>
+          r.grouped(5)
+            .map(g =>
+              g.map(
+                p => p.toPPM
+              ).mkString(" ")
+          ).mkString("\n")
+        )
+        .mkString("\n")
+      s"""|${createHeader}
+      |$colArray
+      |\n""".stripMargin
+
+  end PPM
+
 end Canvas
 
 // case object Canvas:
