@@ -28,3 +28,7 @@ case class Color(r: Double, g: Double, b: Double):
          , Math.abs(b - that.b)).forall(_ < epsilon)
 
 end Color
+
+case object Color:
+  // let's say the default is pitch black
+  def empty = Color(0, 0, 0)
