@@ -1,25 +1,25 @@
 package pw.aldum.traycer
 
 case class Canvas( pixels: Array[Array[Color]] ):
-  def height = this.pixels(0).size
-  def width = this.pixels.size
+  def height = this.pixels.size
+  def width = this.pixels(0).size
 
   override def toString = s"canvas($height, $width)"
 
   def apply(w: Int, h: Int) = new Canvas(w, h)
 
-  def this(w: Int, h: Int) = this(
-    pixels = Array.fill(w)(
-      Array.fill(h)(Color.empty)
+  def this(w: Int, h: Int, c: Color = Color.empty) = this(
+    pixels = Array.fill(h)(
+      Array.fill(w)(c)
     )
   )
 
   def writePixel(x: Int, y: Int, color: Color): Canvas =
-    pixels(x)(y) = color
+    pixels(y)(x) = color
     this
 
   def pixelAt(x: Int, y: Int): Color =
-    pixels(x)(y)
+    pixels(y)(x)
 
 end Canvas
 
