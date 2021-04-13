@@ -18,6 +18,13 @@ case class Canvas( pixels: Array[Array[Color]] ):
     pixels(y)(x) = color
     this
 
+  def safeWritePixel(x: Int, y: Int, color: Color): Canvas =
+    if (x < width && x > 0 &&
+        y < height && y > 0)
+      writePixel(x, y, color)
+    else
+      this
+
   def pixelAt(x: Int, y: Int): Color =
     pixels(y)(x)
 
@@ -28,7 +35,7 @@ case class Canvas( pixels: Array[Array[Color]] ):
           |255""".stripMargin
 
     def toPPM: String =
-      val colArray = pixels.map(r =>
+      val colArray = pixels.reverse.map(r =>
           r.grouped(5)
             .map(g =>
               g.map(
