@@ -1,3 +1,5 @@
+val dottyVersion = "3.0.0-RC2"
+
 lazy val root = project
   .in(file("."))
   .settings(
@@ -6,10 +8,10 @@ lazy val root = project
     version := "0.1.0",
 
     organization := "pw.aldum",
-    scalaVersion := "3.0.0-M3",
+    scalaVersion := dottyVersion,
     libraryDependencies ++= Seq(
-      "org.scalacheck" % "scalacheck_3.0.0-M3" % "1.15.2",
-      "org.scalatest" % "scalatest_3.0.0-M3" % "3.2.3"
+      "org.scalacheck" %% "scalacheck" % "1.15.3",
+      "org.scalatest" %% "scalatest" % "3.2.7"
     ),
     testFrameworks += new TestFramework("minitest.runner.Framework"),
 
