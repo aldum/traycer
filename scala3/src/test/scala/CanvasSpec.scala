@@ -14,7 +14,10 @@ class CanvasSpec extends AnyFlatSpec:
     for {
       x <- 0 until c.width
       y <- 0 until c.height
-    } yield c.pixelAt(x, y) == Color.empty
+    } yield {
+      println(s"$x, $y")
+      c.pixelAt(x, y) == Color.empty
+    }
   }
 
   "writing pixel" should "result" in {
@@ -25,8 +28,8 @@ class CanvasSpec extends AnyFlatSpec:
 
   "ppm header" should "result" in {
     assert( c.PPM.createHeader == s"""P3
-${c.width} ${c.height}
-255""")
+            |${c.width} ${c.height}
+            |255""".stripMargin)
   }
 
   "ppm convert" should "result" in {
