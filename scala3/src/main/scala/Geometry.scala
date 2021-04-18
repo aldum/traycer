@@ -6,6 +6,7 @@ import scala.annotation.targetName
 val epsilon = 1e17
 
 object Geometry:
+  export scala.collection.immutable.ArraySeq
   // type Fourth = 0.0 | 1.0
   // def +(f1: Fourth, f2:Fourth): Fourth =
   //   (f1, f2) match
@@ -81,6 +82,15 @@ object Geometry:
     @targetName("scalarProduct") def *(that: ArraySeq[Double]): Double =
       (vec.zipWithIndex.map((v, i) => v * that(i))).sum
 
+  extension [T](vec: ArraySeq[T])
+    /** Return a new ArraySeq without the element at the specified index.
+     *  @param at If you provide an index out of bounds, this is a noop
+     */
+    def splice(at: Int): ArraySeq[T] =
+      if at < vec.length || at < 0
+      then vec.take(at) ++ vec.takeRight(vec.length - (at + 1))
+      else vec
+
   case class Matrix( val cells: ArraySeq[ArraySeq[Double]] ):
     def nRows = this.cells.size
     def nCols = this.cells(0).size
@@ -114,8 +124,7 @@ object Geometry:
 
     def row(r: Int): ArraySeq[Double] = cells(r)
 
-    def col(c: Int): ArraySeq[Double] =
-      cells.map(r => r(c))
+    def col(c: Int): ArraySeq[Double] = cells.map(r => r(c))
 
     @targetName("product")
     def *(that: Matrix): Matrix =
@@ -133,6 +142,14 @@ object Geometry:
             this(j)(i)
         )
       Matrix(result)
+
+    def submatrix(row: Int, col: Int): Matrix =
+      val subCells = cells
+        .splice(row)
+        .map(_.splice(col))
+      Matrix(subCells)
+
+
   end Matrix
 
   case object Matrix:

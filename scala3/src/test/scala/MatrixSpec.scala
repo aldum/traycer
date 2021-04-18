@@ -178,18 +178,32 @@ class MatrixSpec extends AnyFlatSpec:
 
   "transposing" should "work" in {
     val tbt = Matrix(
-      ArraySeq( ArraySeq( 0.0, 9, 3, 0 )
-              , ArraySeq( 9.0, 8, 0, 8 )
-              , ArraySeq( 1.0, 8, 5, 3 )
-              , ArraySeq( 0.0, 0, 5, 8 )
+      ArraySeq( ArraySeq( 0, 9, 3, 0 )
+              , ArraySeq( 9, 8, 0, 8 )
+              , ArraySeq( 1, 8, 5, 3 )
+              , ArraySeq( 0, 0, 5, 8 )
     ))
     val tt = Matrix(
-      ArraySeq( ArraySeq( 0.0, 9, 1, 0 )
-              , ArraySeq( 9.0, 8, 8, 0 )
-              , ArraySeq( 3.0, 0, 5, 5 )
-              , ArraySeq( 0.0, 8, 3, 8 )
+      ArraySeq( ArraySeq( 0, 9, 1, 0 )
+              , ArraySeq( 9, 8, 8, 0 )
+              , ArraySeq( 3, 0, 5, 5 )
+              , ArraySeq( 0, 8, 3, 8 )
     ))
     assert(tbt.transposed == tt)
   }
+
+  "submatrix" should "return submatrix" in {
+    val m = Matrix(
+      ArraySeq( ArraySeq( 1 , 5, 0 )
+              , ArraySeq( -3, 2, 7 )
+              , ArraySeq( 0 , 6, -3 )
+    ))
+    val sm = Matrix(
+      ArraySeq( ArraySeq( -3, 2 )
+              , ArraySeq( 0 , 6 )
+    ))
+    assert(m.submatrix(0, 2) == sm)
+  }
+
 
 end MatrixSpec
