@@ -15,15 +15,14 @@ class CanvasSpec extends AnyFlatSpec:
       x <- 0 until c.width
       y <- 0 until c.height
     } yield {
-      println(s"$x, $y")
-      c.pixelAt(x, y) == Color.empty
+      c.getPixelAt(x, y) == Color.empty
     }
   }
 
   "writing pixel" should "result" in {
     val red = Color(1, 0, 0)
     val can = c.writePixel(2, 3, red)
-    assert( can.pixelAt(2, 3) === red )
+    assert( can.getPixelAt(2, 3) === red )
   }
 
   "ppm header" should "result" in {

@@ -1,5 +1,3 @@
-// case object lol:
-
 import pw.aldum.traycer.Geometry._
 import pw.aldum.traycer.Canvas
 import pw.aldum.traycer.Color
@@ -20,20 +18,21 @@ val p = Projectile( Point(0, 1, 0)
 val e = Environment( Vector(0, -0.1, 0)
                    , Vector(-0.01, 0, 0))
 
-val can = new Canvas(200, 100)
+val initCan = new Canvas(200, 100)
 
-def animate(p: Projectile): Projectile =
+def animate(p: Projectile, can: Canvas): Projectile =
   // println(p)
   val x = p.pos.x.toInt
   val y = p.pos.y.toInt
-  can.safeWritePixel(x , y, Color(0, 0, 1))
-  if (p.pos.y > 0) animate( tick(e, p) )
+  val outCan = can.writePixel(x, y, Color(0, 0, 1))
+  write(outCan)
+  if (p.pos.y > 0) animate( tick(e, p), outCan )
   else p
 
-animate(p)
+animate(p, initCan)
 
 
-def write =
+def write(can: Canvas) =
   val path = "/tmp/output.ppm" // sys.env("OUTPUT_PATH")
   val printWriter = new java.io.PrintWriter(path)
   printWriter.println(can.PPM.toPPM)

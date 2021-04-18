@@ -1,6 +1,8 @@
 package pw.aldum.traycer
 
-case class Canvas( pixels: Array[Array[Color]] ):
+import scala.collection.immutable.Vector
+
+case class Canvas( val pixels: Vector[Vector[Color]] ):
   def height = this.pixels.size
   def width = this.pixels(0).size
 
@@ -9,23 +11,24 @@ case class Canvas( pixels: Array[Array[Color]] ):
   def apply(w: Int, h: Int) = new Canvas(w, h)
 
   def this(w: Int, h: Int, c: Color = Color.empty) = this(
-    pixels = Array.fill(h)(
-      Array.fill(w)(c)
+    pixels = Vector.fill(h)(
+      Vector.fill(w)(c)
     )
   )
 
+  /** Return a new Canvas with the pixel changed at the specified index.
+   *  If you provide indices out of bounds, this is a noop
+   */
   def writePixel(x: Int, y: Int, color: Color): Canvas =
-    pixels(y)(x) = color
-    this
+    if (x < width && x >= 0 &&
+        y < height && y >= 0)
+    then
+      val r = pixels(y)
+      val upd: Vector[Vector[Color]] = pixels.updated(y, r.updated(x, color))
+      Canvas(upd)
+    else this
 
-  def safeWritePixel(x: Int, y: Int, color: Color): Canvas =
-    if (x < width && x > 0 &&
-        y < height && y > 0)
-      writePixel(x, y, color)
-    else
-      this
-
-  def pixelAt(x: Int, y: Int): Color =
+  def getPixelAt(x: Int, y: Int): Color =
     pixels(y)(x)
 
   object PPM:
@@ -51,17 +54,3 @@ case class Canvas( pixels: Array[Array[Color]] ):
   end PPM
 
 end Canvas
-
-// case object Canvas:
-
-// class Canvas:
-//   val pixels: Array[Array[Color]] = Array.fill(width)(
-//       Array.fill(height)(Color.empty)
-//     )
-
-//   val height: Int
-//   val width: Int
-
-//   def Canvas(w: Int, h: Int): Canvas =
-//     this.height = h
-//     this.width = w
