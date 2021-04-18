@@ -126,6 +126,22 @@ object Geometry:
         )
       Matrix(result)
 
+    def transposed: Matrix =
+      val result: ArraySeq[ArraySeq[Double]] =
+        ArraySeq.tabulate(nCols, nRows)(
+          (i: Int, j: Int) =>
+            this(j)(i)
+        )
+      Matrix(result)
+  end Matrix
+
+  case object Matrix:
+    def identity(n: Int) =
+      new Matrix(cells = ArraySeq.tabulate[Double](n, n)(
+          (i: Int, j: Int) =>
+            if i == j then 1 else 0
+        ))
+
   end Matrix
 
 

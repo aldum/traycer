@@ -90,11 +90,18 @@ class MatrixSpec extends AnyFlatSpec:
     assert( m.col(1).zip(ArraySeq(2.0, 6, 8, 4)).forall(_ == _))
   }
 
+
+  val t1 = Matrix(
+    ArraySeq( ArraySeq( 1.0 , 2, 3, 4 )
+            , ArraySeq( 2.0 , 4, 4, 2 )
+            , ArraySeq( 8.0 , 6, 4, 1 )
+            , ArraySeq( 0.0 , 0, 0, 1 )
+  ))
+  val reverse = Matrix(
+    ArraySeq( ArraySeq( 0.0 , 1 )
+            , ArraySeq( 1.0 , 0 )
+  ))
   "matrix multiplication" should "result" in {
-    val reverse = Matrix(
-      ArraySeq( ArraySeq( 0.0 , 1 )
-              , ArraySeq( 1.0 , 0 )
-    ))
     val twoByFour = Matrix(
       ArraySeq( ArraySeq( 1.0 , 2, 3, 4 )
               , ArraySeq( 2.0 , 4, 4, 2 )
@@ -105,12 +112,6 @@ class MatrixSpec extends AnyFlatSpec:
     ))
     assert(reverse * twoByFour == r2b4)
 
-    val t1 = Matrix(
-      ArraySeq( ArraySeq( 1.0 , 2, 3, 4 )
-              , ArraySeq( 2.0 , 4, 4, 2 )
-              , ArraySeq( 8.0 , 6, 4, 1 )
-              , ArraySeq( 0.0 , 0, 0, 1 )
-    ))
     val t2 = Matrix(
       ArraySeq( ArraySeq( 1.0 )
               , ArraySeq( 2.0 )
@@ -163,6 +164,32 @@ class MatrixSpec extends AnyFlatSpec:
     ))
     val m = a * b
     assert( m == r )
+  }
+
+  val i4 = Matrix.identity(4)
+  "multiplication with identity matrix" should "not change the original" in {
+    assert(t1 * i4 == t1)
+  }
+
+  "transposing symmetrical matrix" should "not change it" in {
+    assert(i4.transposed == i4)
+    assert(reverse.transposed == reverse)
+  }
+
+  "transposing" should "work" in {
+    val tbt = Matrix(
+      ArraySeq( ArraySeq( 0.0, 9, 3, 0 )
+              , ArraySeq( 9.0, 8, 0, 8 )
+              , ArraySeq( 1.0, 8, 5, 3 )
+              , ArraySeq( 0.0, 0, 5, 8 )
+    ))
+    val tt = Matrix(
+      ArraySeq( ArraySeq( 0.0, 9, 1, 0 )
+              , ArraySeq( 9.0, 8, 8, 0 )
+              , ArraySeq( 3.0, 0, 5, 5 )
+              , ArraySeq( 0.0, 8, 3, 8 )
+    ))
+    assert(tbt.transposed == tt)
   }
 
 end MatrixSpec
