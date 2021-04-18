@@ -1,6 +1,7 @@
 package pw.aldum.traycer
 
-import scala.collection.immutable.{ Vector => _ }
+import scala.collection.immutable.ArraySeq
+import scala.annotation.targetName
 
 val epsilon = 1e17
 
@@ -75,6 +76,58 @@ object Geometry:
   // case class Vector() extends Vec4D
   def Vector(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 0.0)
   def Point(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 1.0)
+
+  extension (vec: ArraySeq[Double])
+    @targetName("scalarProduct") def *(that: ArraySeq[Double]): Double =
+      (vec.zipWithIndex.map((v, i) => v * that(i))).sum
+
+  case class Matrix( val cells: ArraySeq[ArraySeq[Double]] ):
+    def nRows = this.cells.size
+    def nCols = this.cells(0).size
+
+    def this(nRows: Int, nCols: Int, v: Double = 0.0) = this(
+      cells = ArraySeq.fill(nRows)(
+        ArraySeq.fill(nCols)(v)
+      )
+    )
+
+    def apply(row: Int) = cells(row)
+
+    def apply(nRows: Int, nCols: Int, v: Double) =
+      new Matrix(nRows, nCols, v)
+
+
+    override def toString =
+      s"""${nRows}x${nCols} matrix:
+      |${ cells.map(row => row.mkString(" ")).mkString("\n") }
+      |""".stripMargin
+
+    def ==(that: Matrix): Boolean =
+      // three cheers for parameter untupling, no `case` keywords!
+      cells.zipWithIndex.forall{ (r, i) =>
+        r.zipWithIndex.forall{ (c, j) =>
+          c == that(i)(j)
+        }
+      }
+
+    def !=(that: Matrix): Boolean = !(this == that)
+
+    def row(r: Int): ArraySeq[Double] = cells(r)
+
+    def col(c: Int): ArraySeq[Double] =
+      cells.map(r => r(c))
+
+    @targetName("product")
+    def *(that: Matrix): Matrix =
+      val result: ArraySeq[ArraySeq[Double]] =
+        ArraySeq.tabulate(nRows, that.nCols)(
+          (i: Int, j: Int) =>
+            this(i) * that.col(j)
+        )
+      Matrix(result)
+
+  end Matrix
+
 
 end Geometry
 

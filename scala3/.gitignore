@@ -26,3 +26,4 @@ classes/
 .idea
 .idea_modules
 /.worksheet/
+src/test/gherkin/
