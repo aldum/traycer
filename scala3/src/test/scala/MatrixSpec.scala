@@ -38,6 +38,7 @@ class MatrixSpec extends AnyFlatSpec:
     assert( m(1)(0) == 1 )
     assert( m(1)(1) == -2 )
   }
+
   "3x3 matrix cons" should "happen" in {
     val m = Matrix(
       ArraySeq( ArraySeq(-3,  5,  0)
@@ -206,5 +207,80 @@ class MatrixSpec extends AnyFlatSpec:
     assert(m.submatrix(0, 2) == sm)
   }
 
+  "determinant of 2x2" should "calculate correctly" in {
+    val m1 = Matrix(
+      ArraySeq( ArraySeq( 1 , 5 )
+              , ArraySeq( -3, 2 )
+    ))
+    assert(m1.determinant == Some(17))
+  }
+
+  "minor" should "calculate correctly" in {
+    val a = Matrix(
+      ArraySeq( ArraySeq( 3 , 5, 0 )
+              , ArraySeq( 2, -1, -7 )
+              , ArraySeq( 6 , -1, 5 )
+    ))
+    val b = a.submatrix(1, 0)
+    assert(b.determinant == Some(25))
+    assert(a.minor(1, 0) == Some(25))
+  }
+
+  "cofactor" should "calculate correctly" in {
+    val a = Matrix(
+      ArraySeq( ArraySeq( 3 , 5, 0 )
+              , ArraySeq( 2, -1, -7 )
+              , ArraySeq( 6 , -1, 5 )
+    ))
+    assert(a.minor(0, 0) == Some(-12))
+    assert(a.cofactor(0, 0) == Some(-12))
+    assert(a.minor(1, 0) == Some(25))
+    assert(a.cofactor(1, 0) == Some(-25))
+  }
+
+  "determinant of 3x3" should "calculate correctly" in {
+    val a = Matrix(
+      ArraySeq( ArraySeq( 1 , 2, 6  )
+              , ArraySeq( -5, 8, -4 )
+              , ArraySeq( 2 , 6, 4  )
+    ))
+    assert(a.cofactor(0, 0) == Some(56))
+    assert(a.cofactor(0, 1) == Some(12))
+    assert(a.cofactor(0, 2) == Some(-46))
+    assert(a.determinant == Some(-196))
+  }
+
+  "determinant of 4x4" should "calculate correctly" in {
+    val a = Matrix(
+      ArraySeq( ArraySeq( -2, -8, 3 , 5 )
+              , ArraySeq( -3, 1 , 7 , 3 )
+              , ArraySeq( 1 , 2 , -9, 6 )
+              , ArraySeq( -6, 7 , 7 ,-9 )
+    ))
+    assert(a.cofactor(0, 0) == Some(690))
+    assert(a.cofactor(0, 1) == Some(447))
+    assert(a.cofactor(0, 2) == Some(210))
+    assert(a.cofactor(0, 3) == Some(51))
+    assert(a.determinant == Some(-4071))
+  }
+
+  "invertibility" should "be determined" in {
+    val a = Matrix(
+      ArraySeq( ArraySeq( 6, 4, 4, 4 )
+              , ArraySeq( 5, 5, 7, 6 )
+              , ArraySeq( 4,-9, 3,-7 )
+              , ArraySeq( 9, 1, 7,-6 )
+    ))
+    assert(a.determinant == Some(-2120))
+    assert(a.isInvertible == true)
+    val b = Matrix(
+      ArraySeq( ArraySeq(-4, 2,-2,-3 )
+              , ArraySeq( 9, 6, 2, 6 )
+              , ArraySeq( 0,-5, 1,-5 )
+              , ArraySeq( 0, 0, 0, 0 )
+    ))
+    assert(b.determinant == Some(0))
+    assert(b.isInvertible == false)
+  }
 
 end MatrixSpec

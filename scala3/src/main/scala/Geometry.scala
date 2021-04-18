@@ -151,6 +151,29 @@ object Geometry:
         .map(_.splice(col))
       Matrix(subCells)
 
+    lazy val determinant: Option[Double] =
+      (nRows, nCols) match
+        case (r, c) if r != c => None
+        case (1, 1) => Some(this(0)(0))
+        case (2, 2) => Some(this(0)(0) * this(1)(1) - this(0)(1) * this(1)(0))
+        case _ =>
+          val firstRow = cells(0)
+          val coeffs = for c <- 0 until nCols
+                       yield firstRow(c) * unsafeCofactor(0, c)
+          Some(coeffs.sum)
+
+    def minor(row: Int, col: Int): Option[Double] =
+      submatrix(row, col).determinant
+
+    def cofactor(row: Int, col: Int): Option[Double] =
+      val sign = if row + col % 2 == 0 then 1 else -1
+      minor(row, col).map(_ * sign)
+
+    // If we know it's square
+    private def unsafeCofactor(row: Int, col: Int): Double =
+      cofactor(row, col).get
+
+    def isInvertible: Boolean = determinant.exists(_ != 0)
 
   end Matrix
 
