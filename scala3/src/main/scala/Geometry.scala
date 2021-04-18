@@ -13,7 +13,7 @@ object Geometry:
   //     case (0, 0) => 0.0
   //     case _ => 1.0
 
-  sealed case class Vec4D(x: Double, y: Double, z: Double, w: Double):
+  case class Vec4D(val x: Double, val y: Double, val z: Double, val w: Double):
     override def toString: String = s"{$x, $y, $z, $w}"
 
     def isPoint: Boolean = w == 1
@@ -52,12 +52,14 @@ object Geometry:
 
     def /(sc: Double) = this * (1/sc)
 
+    @targetName("scalarProduct")
     def *(that: Vec4D): Double =
       x * that.x +
       y * that.y +
       z * that.z +
       w * that.w
 
+    @targetName("crossProduct")
     def x(that: Vec4D): Vec4D =
       Vector( y * that.z - z * that.y
             , z * that.x - x * that.z
@@ -72,8 +74,6 @@ object Geometry:
 
   end Vec4D
 
-
-  // case class Vector() extends Vec4D
   def Vector(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 0.0)
   def Point(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 1.0)
 
