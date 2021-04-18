@@ -127,13 +127,15 @@ object Geometry:
     def col(c: Int): ArraySeq[Double] = cells.map(r => r(c))
 
     @targetName("product")
-    def *(that: Matrix): Matrix =
-      val result: ArraySeq[ArraySeq[Double]] =
-        ArraySeq.tabulate(nRows, that.nCols)(
-          (i: Int, j: Int) =>
-            this(i) * that.col(j)
-        )
-      Matrix(result)
+    def *(that: Matrix): Option[Matrix] =
+      if nCols != that.nRows then None
+      else
+        val result: ArraySeq[ArraySeq[Double]] =
+          ArraySeq.tabulate(nRows, that.nCols)(
+            (i: Int, j: Int) =>
+              this(i) * that.col(j)
+          )
+        Some(Matrix(result))
 
     def transposed: Matrix =
       val result: ArraySeq[ArraySeq[Double]] =
