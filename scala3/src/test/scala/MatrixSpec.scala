@@ -283,4 +283,24 @@ class MatrixSpec extends AnyFlatSpec:
     assert(b.isInvertible == false)
   }
 
+  "inverting" should "work" in {
+    val a = Matrix(
+      ArraySeq( ArraySeq(-5 ,  2 ,  6 , -8 )
+              , ArraySeq( 1 , -5 ,  1 ,  8 )
+              , ArraySeq( 7 ,  7 , -6 , -7 )
+              , ArraySeq( 1 , -3 ,  7 ,  4 )
+    ))
+    assert(a.determinant == Some(532))
+    assert(a.isInvertible == true)
+    assert(a.cofactor(2, 3) == Some(-160))
+    val b = a.inverse.get
+    val ai = Matrix(
+      ArraySeq( ArraySeq( 0.218045,  0.45113 ,  0.24060 , -0.04511)
+              , ArraySeq(-0.80827 , -1.45677 , -0.44361 ,  0.52068)
+              , ArraySeq(-0.07895 , -0.22368 , -0.05263 ,  0.19737)
+              , ArraySeq(-0.52256 , -0.81391 , -0.30075 ,  0.30639)
+    ))
+    assert(b == ai)
+  }
+
 end MatrixSpec

@@ -102,6 +102,10 @@ object Geometry:
     )
 
     def apply(row: Int) = cells(row)
+    def apply(row: Int, col: Int): Option[Double] =
+      if (row > 0 && row < nRows) && (col > 0 && col < nCols)
+      then Some(cells(row)(col))
+      else None
 
     def apply(nRows: Int, nCols: Int, v: Double) =
       new Matrix(nRows, nCols, v)
@@ -167,18 +171,31 @@ object Geometry:
                        yield firstRow(c) * unsafeCofactor(0, c)
           Some(coeffs.sum)
 
+    private lazy val unsafeDeterminant = determinant.get
+
     def minor(row: Int, col: Int): Option[Double] =
       submatrix(row, col).determinant
 
     def cofactor(row: Int, col: Int): Option[Double] =
-      val sign = if row + col % 2 == 0 then 1 else -1
+      val sign = if (row + col) % 2 == 0 then 1 else -1
       minor(row, col).map(_ * sign)
 
     // If we know it's square
     private def unsafeCofactor(row: Int, col: Int): Double =
       cofactor(row, col).get
 
-    def isInvertible: Boolean = determinant.exists(_ != 0)
+    lazy val isInvertible: Boolean = determinant.exists(_ != 0)
+
+    def inverse: Option[Matrix] =
+      if isInvertible
+      then
+        val result = Matrix(ArraySeq.tabulate(nCols, nRows)(
+          (i: Int, j: Int) =>
+            val c = unsafeCofactor(j, i) // builtin transpose
+            c / unsafeDeterminant
+        ))
+        Some(result)
+      else None
 
   end Matrix
 
