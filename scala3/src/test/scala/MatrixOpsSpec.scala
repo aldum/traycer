@@ -246,4 +246,22 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert( a3.inverse.get == a3i )
   }
 
+  "multiplying by inverse" should "reproduce the original" in {
+    val a = Matrix(
+      ArraySeq( ArraySeq( 3 , -9 ,  7 ,  3 )
+              , ArraySeq( 3 , -8 ,  2 , -9 )
+              , ArraySeq(-4 ,  4 ,  4 ,  1 )
+              , ArraySeq(-6 ,  5 , -1 ,  1 )
+    ))
+    val b = Matrix(
+      ArraySeq( ArraySeq(  8 ,  2 ,  2 ,  2 )
+              , ArraySeq(  3 , -1 ,  7 ,  0 )
+              , ArraySeq(  7 ,  0 ,  5 ,  4 )
+              , ArraySeq(  6 , -2 ,  0 ,  5 )
+    ))
+    val c = (a * b).get
+    val bi = b.inverse.get
+    assert((c * bi).get == a)
+  }
+
 end MatrixOpsSpec
