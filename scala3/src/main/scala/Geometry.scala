@@ -3,7 +3,7 @@ package pw.aldum.traycer
 import scala.collection.immutable.ArraySeq
 import scala.annotation.targetName
 
-val epsilon = 1e17
+val epsilon = 1e-5
 
 object Geometry:
   export scala.collection.immutable.ArraySeq
@@ -108,15 +108,20 @@ object Geometry:
 
 
     override def toString =
-      s"""${nRows}x${nCols} matrix:
-      |${ cells.map(row => row.mkString(" ")).mkString("\n") }
+      val cellsText = cells.map(row =>
+          row.map(e => "%.5f".format(e)
+        ).mkString(" ")
+      ).mkString("\n")
+      s"""|${nRows}x${nCols} matrix:
+      |${cellsText}
       |""".stripMargin
 
     def ==(that: Matrix): Boolean =
       // three cheers for parameter untupling, no `case` keywords!
       cells.zipWithIndex.forall{ (r, i) =>
         r.zipWithIndex.forall{ (c, j) =>
-          c == that(i)(j)
+          val d = Math.abs(c - that(i)(j))
+          d <= epsilon
         }
       }
 
