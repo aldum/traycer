@@ -4,7 +4,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "scala3-traycer",
-    description := "Example sbt project that compiles using Scala 3",
+    description := "Ray Tracer implemented in Scala 3",
     version := "0.1.0",
 
     organization := "pw.aldum",
