@@ -14,7 +14,7 @@ object Geometry:
   //     case (0, 0) => 0.0
   //     case _ => 1.0
 
-  case class Vec4D(val x: Double, val y: Double, val z: Double, val w: Double):
+  case class Vec4D(x: Double, y: Double, z: Double, w: Double):
     override def toString: String = s"{$x, $y, $z, $w}"
 
     def isPoint: Boolean = w == 1
@@ -91,7 +91,7 @@ object Geometry:
       then vec.take(at) ++ vec.takeRight(vec.length - (at + 1))
       else vec
 
-  case class Matrix( val cells: ArraySeq[ArraySeq[Double]] ):
+  case class Matrix(cells: ArraySeq[ArraySeq[Double]]):
     def nRows = this.cells.size
     def nCols = this.cells(0).size
 

@@ -2,7 +2,7 @@ package pw.aldum.traycer
 
 import scala.collection.immutable.Vector
 
-case class Canvas( val pixels: Vector[Vector[Color]] ):
+case class Canvas(pixels: Vector[Vector[Color]]):
   def height = this.pixels.size
   def width = this.pixels(0).size
 
