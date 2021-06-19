@@ -1,4 +1,4 @@
-val dottyVersion = "3.0.0-RC2"
+val scala3Version = "3.0.0"
 
 lazy val root = project
   .in(file("."))
@@ -8,12 +8,11 @@ lazy val root = project
     version := "0.1.0",
 
     organization := "pw.aldum",
-    scalaVersion := dottyVersion,
+    scalaVersion := scala3Version,
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.15.3",
-      "org.scalatest" %% "scalatest" % "3.2.7"
+      "org.scalacheck" %% "scalacheck" % "1.15.4" % Test,
+      "org.scalatest" %% "scalatest" % "3.2.9" % Test,
     ),
     testFrameworks += new TestFramework("minitest.runner.Framework"),
 
-    useScala3doc := true,
   )
