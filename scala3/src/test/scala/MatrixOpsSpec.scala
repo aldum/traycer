@@ -1,6 +1,6 @@
 package pw.aldum.traycer
 
-import org.scalatest._
+import org.scalatest.*
 import flatspec.AnyFlatSpec
 
 import Geometry.Matrix
@@ -18,7 +18,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     ArraySeq( ArraySeq( 0, 1 )
             , ArraySeq( 1, 0 )
   ))
-  "matrix multiplication" should "result" in {
+  "matrix multiplication" `should` "result" in {
     val twoByFour = Matrix(
       ArraySeq( ArraySeq( 1, 2, 3, 4 )
               , ArraySeq( 2, 4, 4, 2 )
@@ -84,16 +84,16 @@ class MatrixOpsSpec extends AnyFlatSpec:
   }
 
   val i4 = Matrix.identity(4)
-  "multiplication with identity matrix" should "not change the original" in {
+  "multiplication with identity matrix" `should` "not change the original" in {
     assert( t1 * i4 == Some(t1) )
   }
 
-  "transposing symmetrical matrix" should "not change it" in {
+  "transposing symmetrical matrix" `should` "not change it" in {
     assert(i4.transposed == i4)
     assert(reverse.transposed == reverse)
   }
 
-  "transposing" should "work" in {
+  "transposing" `should` "work" in {
     val tbt = Matrix(
       ArraySeq( ArraySeq( 0, 9, 3, 0 )
               , ArraySeq( 9, 8, 0, 8 )
@@ -109,7 +109,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(tbt.transposed == tt)
   }
 
-  "submatrix" should "return submatrix" in {
+  "submatrix" `should` "return submatrix" in {
     val m = Matrix(
       ArraySeq( ArraySeq( 1 , 5, 0 )
               , ArraySeq( -3, 2, 7 )
@@ -122,7 +122,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(m.submatrix(0, 2) == sm)
   }
 
-  "determinant of 2x2" should "calculate correctly" in {
+  "determinant of 2x2" `should` "calculate correctly" in {
     val m1 = Matrix(
       ArraySeq( ArraySeq( 1 , 5 )
               , ArraySeq( -3, 2 )
@@ -130,7 +130,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(m1.determinant == Some(17))
   }
 
-  "minor" should "calculate correctly" in {
+  "minor" `should` "calculate correctly" in {
     val a = Matrix(
       ArraySeq( ArraySeq( 3 , 5, 0 )
               , ArraySeq( 2, -1, -7 )
@@ -141,7 +141,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(a.minor(1, 0) == Some(25))
   }
 
-  "cofactor" should "calculate correctly" in {
+  "cofactor" `should` "calculate correctly" in {
     val a = Matrix(
       ArraySeq( ArraySeq( 3 , 5, 0 )
               , ArraySeq( 2, -1, -7 )
@@ -153,7 +153,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(a.cofactor(1, 0) == Some(-25))
   }
 
-  "determinant of 3x3" should "calculate correctly" in {
+  "determinant of 3x3" `should` "calculate correctly" in {
     val a = Matrix(
       ArraySeq( ArraySeq( 1 , 2, 6  )
               , ArraySeq( -5, 8, -4 )
@@ -165,7 +165,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(a.determinant == Some(-196))
   }
 
-  "determinant of 4x4" should "calculate correctly" in {
+  "determinant of 4x4" `should` "calculate correctly" in {
     val a = Matrix(
       ArraySeq( ArraySeq( -2, -8, 3 , 5 )
               , ArraySeq( -3, 1 , 7 , 3 )
@@ -179,7 +179,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(a.determinant == Some(-4071))
   }
 
-  "invertibility" should "be determined" in {
+  "invertibility" `should` "be determined" in {
     val a = Matrix(
       ArraySeq( ArraySeq( 6, 4, 4, 4 )
               , ArraySeq( 5, 5, 7, 6 )
@@ -198,7 +198,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert(b.isInvertible == false)
   }
 
-  "inverting" should "work" in {
+  "inverting" `should` "work" in {
     val a = Matrix(
       ArraySeq( ArraySeq(-5 ,  2 ,  6 , -8 )
               , ArraySeq( 1 , -5 ,  1 ,  8 )
@@ -246,7 +246,7 @@ class MatrixOpsSpec extends AnyFlatSpec:
     assert( a3.inverse.get == a3i )
   }
 
-  "multiplying by inverse" should "reproduce the original" in {
+  "multiplying by inverse" `should` "reproduce the original" in {
     val a = Matrix(
       ArraySeq( ArraySeq( 3 , -9 ,  7 ,  3 )
               , ArraySeq( 3 , -8 ,  2 , -9 )

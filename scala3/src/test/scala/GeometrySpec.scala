@@ -1,11 +1,11 @@
 package pw.aldum.traycer
 
-import Geometry._
+import Geometry.*
 
-import org.scalacheck._
+import org.scalacheck.*
 
 object GeometryCheck extends Properties("Geometry"):
-  import Gen._
+  import Gen.*
   import Prop.forAll
   import Arbitrary.arbitrary
 
@@ -62,14 +62,13 @@ object GeometryCheck extends Properties("Geometry"):
 end GeometryCheck
 
 
-import org.scalatest._
+import org.scalatest.*
 import flatspec.AnyFlatSpec
-
 class GeometrySpec extends AnyFlatSpec:
   // import flatspec._
   // import matchers._// /
 
-  "addition" should "work" in {
+  "addition" `should` "work" in {
       val p1 = Point(1, 2, 3)
       val p2 = Point(1, 0, 1)
       val v1 = Vector(0, 1, 1)
@@ -81,7 +80,7 @@ class GeometrySpec extends AnyFlatSpec:
       assert( p1 + p2 == Vec4D(2, 2, 4, 2))
   }
 
-  "subtraction" should "operate" in {
+  "subtraction" `should` "operate" in {
     val p1 = Point(3, 2, 1)
     val p2 = Point(5, 6, 7)
     val v1 = Vector(3, 2, 1)
@@ -95,17 +94,17 @@ class GeometrySpec extends AnyFlatSpec:
     assert(v1 - p1 == Vec4D(0, 0, 0, -1))
   }
 
-  "negate" should "change sign" in {
+  "negate" `should` "change sign" in {
     val v = Vector(1, -2, 3)
     assert(-v == Vector(-1, 2, -3))
   }
 
-  "multiplication by scala" should "change length" in {
+  "multiplication by scala" `should` "change length" in {
     val v = Vector(1, -2, 3)
     assert(v * 3.5 == Vector(3.5, -7, 10.5))
   }
 
-  "length" should "calculate magnitude (pop pop)" in {
+  "length" `should` "calculate magnitude (pop pop)" in {
     assert(Vector(1,0,0).length == 1)
     assert(Vector(0,1,0).length == 1)
     assert(Vector(1,1,0).length == Math.sqrt(2))
@@ -114,12 +113,12 @@ class GeometrySpec extends AnyFlatSpec:
     assert(Vector(-1,-2,-3).length == Math.sqrt(14))
   }
 
-  "The magnitude of a normalized vector" should "be 1" in {
+  "The magnitude of a normalized vector" `should` "be 1" in {
     val v = Vector(1, 2, 3)
     assert(v.normalized.length == 1)
   }
 
-  "vector products" should "be" in {
+  "vector products" `should` "be" in {
     val a = Vector(1, 2, 3)
     val b = Vector(2, 3, 4)
     assert(a * b == 20)

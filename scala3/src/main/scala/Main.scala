@@ -1,6 +1,6 @@
 package pw.aldum.traycer
 
-import Geometry._
+import Geometry.*
 
 object Main extends App:
   // println(msg)

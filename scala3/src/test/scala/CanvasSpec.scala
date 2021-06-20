@@ -1,37 +1,36 @@
 package pw.aldum.traycer
 
-import Color._
+import Color.*
 
-import org.scalatest._
+import org.scalatest.*
 import flatspec.AnyFlatSpec
 
 class CanvasSpec extends AnyFlatSpec:
   val c = new Canvas(10, 20)
 
-  "creating a canvas" should "result" in {
+  "creating a canvas" `should` "result" in {
     assert(c.width == 10)
     assert(c.height == 20)
     for {
       x <- 0 until c.width
       y <- 0 until c.height
-    } yield {
+    } yield
       c.getPixelAt(x, y) == Color.empty
-    }
   }
 
-  "writing pixel" should "result" in {
+  "writing pixel" `should` "result" in {
     val red = Color(1, 0, 0)
     val can = c.writePixel(2, 3, red)
     assert( can.getPixelAt(2, 3) === red )
   }
 
-  "ppm header" should "result" in {
+  "ppm header" `should` "result" in {
     assert( c.PPM.createHeader == s"""P3
             |${c.width} ${c.height}
             |255""".stripMargin)
   }
 
-  "ppm convert" should "result" in {
+  "ppm convert" `should` "result" in {
     val c = new Canvas(5, 3)
     val c1 = Color(1.5, 0, 0)
     val c2 = Color(0, .5, 0)
@@ -50,7 +49,7 @@ class CanvasSpec extends AnyFlatSpec:
     // assert(ppm.mkString("\n") == test)
   }
 
-  "ppm convert for large canvas" should "result" in {
+  "ppm convert for large canvas" `should` "result" in {
     val col = Color(1, .8, .6)
     val c = new Canvas(10, 2, col)
     val ppm = c.PPM.toPPM.linesIterator.take(7).drop(3).toList
@@ -63,7 +62,7 @@ class CanvasSpec extends AnyFlatSpec:
     assert(test == ppm.mkString("\n"))
   }
 
-  "ppm convert ends with newline" should "result" in {
+  "ppm convert ends with newline" `should` "result" in {
     val c = new Canvas(5, 3)
     val ppm = c.PPM.toPPM
     assert(ppm.endsWith("\n"))

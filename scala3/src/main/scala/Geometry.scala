@@ -61,10 +61,11 @@ object Geometry:
       w * that.w
 
     @targetName("crossProduct")
-    def x(that: Vec4D): Vec4D =
-      Vector( y * that.z - z * that.y
-            , z * that.x - x * that.z
-            , x * that.y - y * that.x)
+    infix def x(that: Vec4D): Vec4D =
+      Vec4D( y * that.z - z * that.y
+           , z * that.x - x * that.z
+           , x * that.y - y * that.x
+           , 0)
 
     def ==(that: Vec4D): Boolean =
       Seq( Math.abs(x - that.x)
