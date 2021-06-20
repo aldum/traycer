@@ -86,10 +86,14 @@ object Geometry:
     /** Return a new ArraySeq without the element at the specified index.
      *  @param at If you provide an index out of bounds, this is a noop
      */
+    private def boundsCheck = utils.MatchUtils.OutOfBounds(vec.length)
     def splice(at: Int): ArraySeq[T] =
-      if at < vec.length || at < 0
-      then vec.take(at) ++ vec.takeRight(vec.length - (at + 1))
-      else vec
+      at match
+        case vec.boundsCheck() => vec
+        case _ =>
+          val (head, tail) = vec.splitAt(at)
+          if tail.isEmpty then head else head ++ tail.tail
+
 
   case class Matrix(cells: ArraySeq[ArraySeq[Double]]):
     def nRows = this.cells.size
