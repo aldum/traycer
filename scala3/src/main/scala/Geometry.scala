@@ -14,7 +14,7 @@ object Geometry:
   //     case (0, 0) => 0.0
   //     case _ => 1.0
 
-  case class Vec4D(x: Double, y: Double, z: Double, w: Double):
+  class Vec4D(val x: Double, val y: Double, val z: Double, val w: Double):
     override def toString: String = s"{$x, $y, $z, $w}"
 
     def isPoint: Boolean = w == 1
@@ -31,7 +31,7 @@ object Geometry:
            , z / length
            , w)
 
-    def +(that: Vec4D) =
+    def +(that: Vec4D): Vec4D =
       Vec4D( x + that.x
            , y + that.y
            , z + that.z
@@ -77,7 +77,13 @@ object Geometry:
   end Vec4D
 
   def Vector(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 0.0)
-  def Point(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 1.0)
+  // def Point(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 1.0)
+  // case class Vector( override val x: Double
+  //                  , override val y: Double
+  //                  , override val z: Double) extends Vec4D(x, y, z, 0.0)
+  case class Point( override val x: Double
+                  , override val y: Double
+                  , override val z: Double) extends Vec4D(x, y, z, 1.0)
 
   extension (vec: ArraySeq[Double])
     @targetName("scalarProduct") def *(that: ArraySeq[Double]): Double =
@@ -213,6 +219,45 @@ object Geometry:
 
   end Matrix
 
+  given colMat: Conversion[Vec4D, Matrix] with
+    def apply(v: Vec4D): Matrix =
+      new Matrix(
+            ArraySeq(ArraySeq(v.x),
+                     ArraySeq(v.y),
+                     ArraySeq(v.z),
+                     ArraySeq(v.w))
+        )
+
+  enum Transformation:
+    case Translate(offset: Vec4D)
+    case Scale(s: Vec4D)
+    case Rotate(a: Vec4D, r: Double)
+    case Shear
+
+    def matrix(t: Transformation) = t match
+      case Translate(o) => Matrix(
+                              ArraySeq( ArraySeq( 1, 0, 0, o.x )
+                                      , ArraySeq( 0, 1, 0, o.y )
+                                      , ArraySeq( 0, 0, 1, o.z )
+                                      , ArraySeq( 0, 0, 0, 1 )
+                            ))
+      case _ => ???
+
+    @targetName("product")
+    def *(that: Matrix): Option[Matrix] =
+      val m = matrix(this)
+      if m.nCols != that.nRows then None
+      else
+        val result: ArraySeq[ArraySeq[Double]] =
+          ArraySeq.tabulate(m.nRows, that.nCols)(
+            (i: Int, j: Int) =>
+              m(i) * that.col(j)
+          )
+        Some(Matrix(result))
+
+    def inverse =
+      // translation is always 4x4, so it always has an inverse
+      matrix(this).inverse.get
 
 end Geometry
 
