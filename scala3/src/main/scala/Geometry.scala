@@ -228,32 +228,70 @@ object Geometry:
                      ArraySeq(v.w))
         )
 
+  enum Base: //(v: Vec4D):
+    case X // extends Base(Vector(0,1,0))
+    case Y // extends Base(Vector(0,0,1))
+    case Z // extends Base(Vector(1,0,0))
+
   enum Transformation:
+    import Base.*
+    import Math.{cos, sin}
+
     case Translate(offset: Vec4D)
     case Scale(s: Vec4D)
-    case Rotate(a: Vec4D, r: Double)
+    case Rotate(a: Base, r: Double)
     case Shear
 
     def matrix(t: Transformation) = t match
-      case Translate(o) => Matrix(
-                              ArraySeq( ArraySeq( 1, 0, 0, o.x )
-                                      , ArraySeq( 0, 1, 0, o.y )
-                                      , ArraySeq( 0, 0, 1, o.z )
-                                      , ArraySeq( 0, 0, 0, 1 )
-                            ))
+      case Translate(o) =>
+        Matrix(
+          ArraySeq( ArraySeq( 1, 0, 0, o.x )
+                  , ArraySeq( 0, 1, 0, o.y )
+                  , ArraySeq( 0, 0, 1, o.z )
+                  , ArraySeq( 0, 0, 0, 1 )
+        ))
+      case Scale(s) =>
+        Matrix(
+          ArraySeq( ArraySeq( s.x, 0, 0, 0 )
+                  , ArraySeq( 0, s.y, 0, 0 )
+                  , ArraySeq( 0, 0, s.z, 0 )
+                  , ArraySeq( 0, 0, 0,   1 )
+        ))
+      case Rotate(b, r) => b match
+        case X =>
+          Matrix(
+            ArraySeq( ArraySeq( 1, 0, 0, 0 )
+                    , ArraySeq( 0, cos(r), -sin(r), 0 )
+                    , ArraySeq( 0, sin(r), cos(r), 0 )
+                    , ArraySeq( 0, 0, 0,   1 )
+          ))
+        case Y =>
+          Matrix(
+            ArraySeq( ArraySeq( cos(r) , 0, sin(r), 0 )
+                    , ArraySeq( 0      , 1, 0, 0 )
+                    , ArraySeq( -sin(r), 0, cos(r), 0 )
+                    , ArraySeq( 0, 0, 0,   1 )
+          ))
+        case Z =>
+          Matrix(
+            ArraySeq( ArraySeq( cos(r), -sin(r), 0, 0 )
+                    , ArraySeq( sin(r), cos(r), 0, 0 )
+                    , ArraySeq( 0, 0, 1, 0 )
+                    , ArraySeq( 0, 0, 0, 1 )
+          ))
+
       case _ => ???
+    end matrix
 
     @targetName("product")
-    def *(that: Matrix): Option[Matrix] =
+    def *(that: Matrix): Matrix =
       val m = matrix(this)
-      if m.nCols != that.nRows then None
-      else
-        val result: ArraySeq[ArraySeq[Double]] =
-          ArraySeq.tabulate(m.nRows, that.nCols)(
-            (i: Int, j: Int) =>
-              m(i) * that.col(j)
-          )
-        Some(Matrix(result))
+      val result: ArraySeq[ArraySeq[Double]] =
+        ArraySeq.tabulate(m.nRows, that.nCols)(
+          (i: Int, j: Int) =>
+            m(i) * that.col(j)
+        )
+      Matrix(result)
 
     def inverse =
       // translation is always 4x4, so it always has an inverse
