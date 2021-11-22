@@ -12,7 +12,6 @@ Test / parallelExecution := false
 Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oSD")
 Test / turbo := true
 
-ThisBuild / autoStartServer := false
 ThisBuild / includePluginResolvers := true
 ThisBuild / turbo := true
 ThisBuild / useSuperShell := false
