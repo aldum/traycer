@@ -240,7 +240,9 @@ object Geometry:
     case Translate(offset: Vec4D)
     case Scale(s: Vec4D)
     case Rotate(a: Base, r: Double)
-    case Shear
+    case Shear(xy: Double, xz: Double,
+               yx: Double, yz: Double,
+               zx: Double, zy: Double)
 
     def matrix(t: Transformation) = t match
       case Translate(o) =>
@@ -280,7 +282,13 @@ object Geometry:
                     , ArraySeq( 0, 0, 0, 1 )
           ))
 
-      case _ => ???
+      case Shear(xy, xz, yx, yz, zx, zy) =>
+        Matrix(
+            ArraySeq( ArraySeq( 1, xy, xz, 0 )
+                    , ArraySeq( yx, 1, yz, 0 )
+                    , ArraySeq( zx, zy, 1, 0 )
+                    , ArraySeq( 0, 0, 0,   1 )
+          ))
     end matrix
 
     @targetName("product")

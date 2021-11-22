@@ -9,6 +9,8 @@ import Geometry.given
 class TransformationsSpec extends TestTrait:
   import Transformation.*
 
+  /// TRANSLATE
+
   val p = Point(-3, 4, 5)
   val t = Translate(Vector(5, -3, 2))
   test("Multiplying by a translation matrix") {
@@ -44,6 +46,8 @@ class TransformationsSpec extends TestTrait:
     val v = Vector(5, -3, 2)
     assert( t * v == colMat(v) )
   }
+
+  /// SCALE
 
   val s = Scale(Vector(2, 3, 4))
   test("A scaling matrix applied to a point") {
@@ -91,6 +95,8 @@ class TransformationsSpec extends TestTrait:
     val r = Point(-2, 3, 4)
     assert( ref * p == colMat(r) )
   }
+
+  /// ROT
 
   val half_quarter_x = Rotate(Base.X, Math.PI / 4)
   val quarter_x = Rotate(Base.X, Math.PI / 2)
@@ -157,3 +163,77 @@ class TransformationsSpec extends TestTrait:
     assert(half_quarter_z * p == colMat(r1))
     assert(quarter_z * p == colMat(r2))
   }
+
+  /// SHEAR
+  test("A shearing transformation moves x in proportion to y") {
+    /*
+    Given transform ← shearing(1, 0, 0, 0, 0, 0)
+      And p ← point(2, 3, 4)
+    Then transform * p = point(5, 3, 4)
+    */
+    val p = Point(2, 3, 4)
+    val t = Shear(1, 0, 0, 0, 0, 0)
+    val r = Point(5, 3, 4)
+    assert(t * p == colMat(r))
+  }
+
+  test("A shearing transformation moves x in proportion to z") {
+    /*
+    Given transform ← shearing(0, 1, 0, 0, 0, 0)
+      And p ← point(2, 3, 4)
+    Then transform * p = point(6, 3, 4)
+    */
+    val p = Point(2, 3, 4)
+    val t = Shear(0, 1, 0, 0, 0, 0)
+    val r = Point(6, 3, 4)
+    assert(t * p == colMat(r))
+  }
+
+  test("A shearing transformation moves y in proportion to x") {
+    /*
+    Given transform ← shearing(0, 0, 1, 0, 0, 0)
+      And p ← point(2, 3, 4)
+    Then transform * p = point(2, 5, 4)
+    */
+    val p = Point(2, 3, 4)
+    val t = Shear(0, 0, 1, 0, 0, 0)
+    val r = Point(2, 5, 4)
+    assert(t * p == colMat(r))
+  }
+
+  test("A shearing transformation moves y in proportion to z") {
+    /*
+    Given transform ← shearing(0, 0, 0, 1, 0, 0)
+    And p ← point(2, 3, 4)
+  Then transform * p = point(2, 7, 4)
+    */
+    val p = Point(2, 3, 4)
+    val t = Shear(0, 0, 0, 1, 0, 0)
+    val r = Point(2, 7, 4)
+    assert(t * p == colMat(r))
+  }
+
+  test("A shearing transformation moves z in proportion to x") {
+    /*
+    Given transform ← shearing(0, 0, 0, 0, 1, 0)
+    And p ← point(2, 3, 4)
+  Then transform * p = point(2, 3, 6)
+    */
+    val p = Point(2, 3, 4)
+    val t = Shear(0, 0, 0, 0, 1, 0)
+    val r = Point(2, 3, 6)
+    assert(t * p == colMat(r))
+  }
+
+  test("A shearing transformation moves z in proportion to y") {
+    /*
+    Given transform ← shearing(0, 0, 0, 0, 0, 1)
+    And p ← point(2, 3, 4)
+  Then transform * p = point(2, 7, 4)
+    */
+    val p = Point(2, 3, 4)
+    val t = Shear(0, 0, 0, 0, 0, 1)
+    val r = Point(2, 3, 7)
+    assert(t * p == colMat(r))
+  }
+
