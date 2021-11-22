@@ -237,3 +237,55 @@ class TransformationsSpec extends TestTrait:
     assert(t * p == colMat(r))
   }
 
+  /// Chain
+
+  test("Individual transformations are applied in sequence") {
+    /*
+    Given p ← point(1, 0, 1)
+      And A ← rotation_x(π / 2)
+      And B ← scaling(5, 5, 5)
+      And C ← translation(10, 5, 7)
+    # apply rotation first
+    When p2 ← A * p
+    Then p2 = point(1, -1, 0)
+    # then apply scaling
+    When p3 ← B * p2
+    Then p3 = point(5, -5, 0)
+    # then apply translation
+    When p4 ← C * p3
+    Then p4 = point(15, 0, 7)
+    */
+    val p = Point(1, 0, 1)
+    val scale5 = Scale(Vector(5, 5, 5))
+    val ts = Translate(Vector(10, 5, 7))
+
+    val t2 = quarter_x * p
+    val p2 = Point(1, -1, 0)
+    assert(t2 == colMat(p2))
+
+    val t3 = scale5 * p2
+    val p3 = Point(5, -5, 0)
+    assert(t3 == colMat(p3))
+
+    val t4 = ts * p3
+    val p4 = Point(15, 0, 7)
+    assert(t4 == colMat(p4))
+  }
+
+  test("Chained transformations must be applied in reverse order") {
+    /*
+    Given p ← point(1, 0, 1)
+      And A ← rotation_x(π / 2)
+      And B ← scaling(5, 5, 5)
+      And C ← translation(10, 5, 7)
+    When T ← C * B * A
+    Then T * p = point(15, 0, 7)
+    */
+    val p = Point(1, 0, 1)
+    val scale5 = Scale(Vector(5, 5, 5))
+    val ts = Translate(Vector(10, 5, 7))
+
+    val T = ts * scale5 * quarter_x.matrix
+    val pr = Point(15, 0, 7)
+    assert(T.get * p == Some(colMat(pr)))
+  }

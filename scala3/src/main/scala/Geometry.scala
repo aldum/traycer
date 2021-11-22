@@ -244,7 +244,7 @@ object Geometry:
                yx: Double, yz: Double,
                zx: Double, zy: Double)
 
-    def matrix(t: Transformation) = t match
+    def matrix = this match
       case Translate(o) =>
         Matrix(
           ArraySeq( ArraySeq( 1, 0, 0, o.x )
@@ -252,6 +252,7 @@ object Geometry:
                   , ArraySeq( 0, 0, 1, o.z )
                   , ArraySeq( 0, 0, 0, 1 )
         ))
+
       case Scale(s) =>
         Matrix(
           ArraySeq( ArraySeq( s.x, 0, 0, 0 )
@@ -259,6 +260,7 @@ object Geometry:
                   , ArraySeq( 0, 0, s.z, 0 )
                   , ArraySeq( 0, 0, 0,   1 )
         ))
+
       case Rotate(b, r) => b match
         case X =>
           Matrix(
@@ -291,9 +293,9 @@ object Geometry:
           ))
     end matrix
 
-    @targetName("product")
+    @targetName("product_m")
     def *(that: Matrix): Matrix =
-      val m = matrix(this)
+      val m = this.matrix
       val result: ArraySeq[ArraySeq[Double]] =
         ArraySeq.tabulate(m.nRows, that.nCols)(
           (i: Int, j: Int) =>
@@ -301,9 +303,22 @@ object Geometry:
         )
       Matrix(result)
 
+    @targetName("product")
+    def *(that: Transformation): Matrix =
+      val m = this.matrix
+      val m2 = that.matrix
+      val result: ArraySeq[ArraySeq[Double]] =
+        ArraySeq.tabulate(m.nRows, m2.nCols)(
+          (i: Int, j: Int) =>
+            m(i) * m2.col(j)
+        )
+      Matrix(result)
+
     def inverse =
       // translation is always 4x4, so it always has an inverse
-      matrix(this).inverse.get
+      this.matrix.inverse.get
+
+
 
 end Geometry
 
