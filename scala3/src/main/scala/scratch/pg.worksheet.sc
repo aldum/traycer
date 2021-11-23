@@ -1,4 +1,4 @@
-import pw.aldum.traycer.Geometry._
+import pw.aldum.traycer.Geometry.*
 import pw.aldum.traycer.Canvas
 import pw.aldum.traycer.Color
 
@@ -29,15 +29,31 @@ def animate(p: Projectile, can: Canvas): Projectile =
   if (p.pos.y > 0) animate( tick(e, p), outCan )
   else p
 
-animate(p, initCan)
+// animate(p, initCan)
 
 
-def write(can: Canvas) =
-  val path = "/tmp/output.ppm" // sys.env("OUTPUT_PATH")
+def write(canvas: Canvas, path: String = "/tmp/output.ppm") =
   val printWriter = new java.io.PrintWriter(path)
-  printWriter.println(can.PPM.toPPM)
+  printWriter.println(canvas.PPM.toPPM)
   printWriter.close()
 
 
 Float.MaxValue
 Double.MaxValue
+
+
+var clockCan = new Canvas(200, 200)
+def drawClock =
+  import Transformation.*
+  for i <- Range(0, 12)
+  do
+    val p = Point(50, 0, 0)
+    val r = Math.PI / 6
+    val pp = (Translate(Vector(100, 100, 0)) * Rotate(Base.Z, i * r) * p).get
+    // println(s"${pp.col(0)(0)}, ${pp.col(0)(1)}")
+    val x = pp.col(0)(0).toInt
+    val y = pp.col(0)(1).toInt
+    clockCan = clockCan.writePixel(x, y, Color(0.5, 0.5, 1))
+
+drawClock
+write(clockCan, "/tmp/clock.ppm")
