@@ -1,4 +1,5 @@
-package pw.aldum.traycer
+package pw.aldum
+package traycer
 
 import scala.collection.immutable.ArraySeq
 import scala.annotation.targetName
@@ -76,11 +77,11 @@ object Geometry:
 
   end Vec4D
 
-  def Vector(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 0.0)
+  // def Vector(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 0.0)
   // def Point(x: Double, y: Double, z: Double) = Vec4D(x, y, z, 1.0)
-  // case class Vector( override val x: Double
-  //                  , override val y: Double
-  //                  , override val z: Double) extends Vec4D(x, y, z, 0.0)
+  case class Vector( override val x: Double
+                   , override val y: Double
+                   , override val z: Double) extends Vec4D(x, y, z, 0.0)
   case class Point( override val x: Double
                   , override val y: Double
                   , override val z: Double) extends Vec4D(x, y, z, 1.0)

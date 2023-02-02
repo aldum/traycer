@@ -1,6 +1,7 @@
 .DS_Store
 *.class
 *.log
+*.semanticdb
 *~
 
 # sbt specific
@@ -28,3 +29,7 @@ classes/
 .idea_modules
 /.worksheet/
 src/test/gherkin/
+
+# VSCode
+.vscode/
+.history
