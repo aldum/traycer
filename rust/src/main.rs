@@ -1,7 +1,7 @@
 use crate::geometry::Tuple;
 
 pub mod geometry;
-pub mod vector_tests;
+pub mod geometry_tests;
 // use vector::Vector;
 
 fn main() {
